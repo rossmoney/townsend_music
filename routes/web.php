@@ -22,3 +22,6 @@ Route::get('/', function () {
 
 Route::get('/products', [ ProductsController::class, 'index']);
 Route::get('/products/{section}', [ ProductsController::class, 'bySection']);
+
+Route::get('/products_original', [ ProductsController::class, 'original']);
+Route::get('/products_original/{section}', [ ProductsController::class, 'originalBySection']);

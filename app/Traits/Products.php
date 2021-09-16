@@ -25,9 +25,11 @@ trait Products
 
         $sectionField = 'description';
         $sectionCompare = 'LIKE';
+        $sectionValue = '%'. $section . '%';
         if (is_numeric($section)) {
             $sectionField = 'id';
             $sectionCompare = '=';
+            $sectionValue = $section;
         }
 
         if ($sort === 0) {
@@ -35,32 +37,33 @@ trait Products
         }
 
         $query = StoreProduct::select('store_products.id as id', 'store_products.*');
+
+        //$sort = "position"; //sort was stuck to position on old version not sure if intentional or not, so set sort to position, to test sort, remove
  
         switch ($sort) {
             case "az":
-                $query = $query->orderBy('name');
+                $query->orderBy('name');
                 break;
             case "za":
-                $query = $query->orderBy('name', 'DESC');
+                $query->orderBy('name', 'DESC');
                 break;
             case "low":
-                $query = $query->orderBy('price');
+                $query->orderBy('price');
                 break;
             case "high":
-                $query = $query->orderBy('price', 'DESC');
+                $query->orderBy('price', 'DESC');
                 break;
             case "old":
-                $query = $query->orderBy('release_date');
+                $query->orderBy('release_date');
                 break;
             case "new":
-                $query = $query->orderBy('release_date', 'DESC');
+                $query->orderBy('release_date', 'DESC');
                 break;
-
-            default:
+            case "position":
                 if ((isset($section) && ($section == "%" || $section == "all"))) {
-                    $query = $query->orderBy('position')->orderBy('release_date', 'DESC');
-               // } else {
-                //    $query = $query->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
+                    $query->orderBy('position')->orderBy('release_date', 'DESC');
+                } else {
+                    $query->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
                 }
                 break;
         }
@@ -69,13 +72,9 @@ trait Products
 
         if ($section != '%' && strtoupper($section) != 'ALL')
         {
-            $query->whereHas('sections', function($q) use ($sectionField, $sectionCompare, $section) {
-                $q->where($sectionField, $sectionCompare, '%' . $section. '%');
-                $q->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
-            });
-            /*$query->join('store_products_section', 'store_products_section.store_product_id', '=', 'store_products.id')
+            $query->join('store_products_section', 'store_products_section.store_product_id', '=', 'store_products.id')
                   ->join('sections', 'store_products_section.section_id', '=', 'sections.id')
-                  ->where('sections.' . $sectionField, $sectionCompare, '%' . $section. '%');*/
+                  ->where('sections.' . $sectionField, $sectionCompare, $sectionValue);
         } 
 
         if ($section == '%' || strtoupper($section) == 'ALL')
@@ -131,6 +130,7 @@ trait Products
 
             if ($product->available == 1)
             {
+                $productOutput['image'] = $product->image;
                 $productOutput['id'] = $product->id;
                 $productOutput['artist'] = $product->artist->name;
                 $productOutput['title'] = $product->title;

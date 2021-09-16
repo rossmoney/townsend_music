@@ -62,6 +62,8 @@ class StoreProduct extends Model
 
     public function getPriceAttribute()
     {
+        $price = $this->getRawOriginal('price');
+
         switch (Session::get('currency')) {
             case "USD":
                 $price = $this->dollar_price;

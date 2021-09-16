@@ -28,6 +28,11 @@
             <p><a target="_blank" href="/products/t-shirt?page=2&perPage=8">/products/t-shirt?page=2&perPage=8</a></p>
             <p><a target="_blank" href="/products/t-shirt?page=1">/products/t-shirt?page=1</a></p>
             <p><a target="_blank" href="/products">/products</a></p>
+
+
+            <h2>Routes to test old code</h2>
+            <p><a href="/products_original/t-shirt?page=1&perPage=2&sort=az">/products_original/t-shirt?page=1&perPage=2&sort=az</a></p>
+            <p><a href="/products_original">/products_original</a></p>
         </div>
     </body>
 </html>

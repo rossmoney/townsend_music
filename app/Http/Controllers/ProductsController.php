@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Session;
 
 use App\Traits\Products;
 
+use App\store_products;
+
 class ProductsController extends Controller
 {
     use Products;
 
+    public $products;
     public $storeId;
     
     public function __construct()
@@ -20,7 +23,9 @@ class ProductsController extends Controller
         store is being set here for the purpose of the test */
         $this->storeId = 3;
 
-        Session::put('currency', 'EUR');
+        //Session::put('currency', 'EUR');
+
+        $this->products = new store_products();
     }
 
     public function index()
@@ -29,7 +34,7 @@ class ProductsController extends Controller
         $perPage = request()->input('perPage');
         $sort = request()->input('sort');
 
-        return response()->json($this->sectionProducts(section: 'all', number : $perPage, page : $page, sort: $sort ));
+        return response()->json($this->sectionProducts(section: '%', number : $perPage, page : $page, sort: $sort ));
     }
 
     public function bySection(string $section)
@@ -40,5 +45,22 @@ class ProductsController extends Controller
 
         return response()->json($this->sectionProducts(section: $section, number : $perPage, page : $page, sort: $sort ));
     }
+    
+    public function original()
+    {
+        $page = request()->input('page');
+        $perPage = request()->input('perPage');
+        $sort = request()->input('sort');
+  
+        return response()->json($this->products->sectionProducts(3, '%', $perPage, $page, $sort));
+    }
 
+    public function originalBySection(string $section)
+    {
+        $page = request()->input('page');
+        $perPage = request()->input('perPage');
+        $sort = request()->input('sort');
+
+        return response()->json($this->products->sectionProducts(3, $section, $perPage, $page, $sort));
+    }
 }
