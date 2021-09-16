@@ -114,15 +114,15 @@ class store_products
         if ($section != '%') {
             $query .= "INNER JOIN store_products_section ON store_products_section.store_product_id = sp.id
                         INNER JOIN sections ON store_products_section.section_id = sections.id
-                        WHERE sections.$section_field $section_compare '$section_value' AND ";
-            $orderby = " ORDER BY store_products_section.position ASC, sp.position ASC, release_date DESC$pages";
+                        WHERE sections.$section_field $section_compare '$section_value' AND "; //fixed LIKE variant
+            //$orderby = " ORDER BY store_products_section.position ASC, sp.position ASC, release_date DESC$pages";
         } else {
             $query .= "LEFT JOIN sections ON sections.id = -1 WHERE ";
-            $orderby = " ORDER BY position ASC, release_date DESC$pages";
+            //$orderby = " ORDER BY position ASC, release_date DESC$pages";
         }
 
         $query .= " sp.store_id = '$store_id' AND deleted = '0' AND available = 1  ";
-        $query .= $orderby;
+        $query .= $order . $pages; //$orderby; Didn't load the sorting correctly
 
         $result = $conn->query($query);
        
