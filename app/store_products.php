@@ -30,9 +30,11 @@ class store_products
 
         $section_field = 'description';
         $section_compare = 'LIKE';
+        $section_value = '%'. $section . '%'; //add % for like
         if (is_numeric($section)) {
             $section_field = 'id';
             $section_compare = '=';
+            $section_value = $section;
         }
 
         if ($sort === 0) {
@@ -87,7 +89,7 @@ class store_products
 
                 $query .= "INNER JOIN store_products_section ON store_products_section.store_product_id = sp.id
                             INNER JOIN sections ON store_products_section.section_id = sections.id
-                            WHERE sections.$section_field $section_compare '$section' AND ";
+                            WHERE sections.$section_field $section_compare '$section_value' AND ";
 
             } else {
                 $query .= "LEFT JOIN sections ON sections.id = -1 WHERE ";
@@ -112,7 +114,7 @@ class store_products
         if ($section != '%') {
             $query .= "INNER JOIN store_products_section ON store_products_section.store_product_id = sp.id
                         INNER JOIN sections ON store_products_section.section_id = sections.id
-                        WHERE sections.$section_field $section_compare '$section' AND ";
+                        WHERE sections.$section_field $section_compare '$section_value' AND ";
             $orderby = " ORDER BY store_products_section.position ASC, sp.position ASC, release_date DESC$pages";
         } else {
             $query .= "LEFT JOIN sections ON sections.id = -1 WHERE ";
