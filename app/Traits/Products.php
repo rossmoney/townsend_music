@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\StoreProduct;
@@ -73,12 +74,12 @@ trait Products
                   ->where('sections.' . $sectionField, $sectionCompare, '%' . $section. '%');
         } 
 
-        /*if ($section == '%' || strtoupper($section) == 'ALL')
+        if ($section == '%' || strtoupper($section) == 'ALL')
         {
             $query->leftJoin('sections', function($join) {
                 $join->on('sections.id', '=', DB::raw(-1));
             });
-        }*/
+        }
 
         $query->where('store_products.store_id', $this->storeId);
         $query->where('deleted', 0);
