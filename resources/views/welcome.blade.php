@@ -23,7 +23,8 @@
     <body>
         <div class="container">
             <p><a target="_blank" href="/products/t-shirt?page=1&perPage=2&sort=az">/products/t-shirt?page=1&perPage=2&sort=az</a></p>
-            <p><a target="_blank" href="/products/t-shirt?page=1&perPage=2&sort=az">/products/t-shirt?page=2&perPage=2</a></p>
+            <p><a target="_blank" href="/products/t-shirt?page=1&perPage=2">/products/t-shirt?page=1&perPage=2</a></p>
+            <p><a target="_blank" href="/products/t-shirt?page=2&perPage=2">/products/t-shirt?page=2&perPage=2</a></p>
             <p><a target="_blank" href="/products/t-shirt?page=2&perPage=8">/products/t-shirt?page=2&perPage=8</a></p>
             <p><a target="_blank" href="/products/t-shirt?page=1">/products/t-shirt?page=1</a></p>
             <p><a target="_blank" href="/products">/products</a></p>

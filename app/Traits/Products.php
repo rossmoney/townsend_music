@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\StoreProduct;
@@ -35,37 +33,38 @@ trait Products
             $sort = "position";
         }
 
+        $query = StoreProduct::select('store_products.id as id', 'store_products.*');
+ 
         switch ($sort) {
             case "az":
-                $query = StoreProduct::orderBy('name');
+                $query = $query->orderBy('name');
                 break;
             case "za":
-                $query = StoreProduct::orderBy('name', 'DESC');
+                $query = $query->orderBy('name', 'DESC');
                 break;
             case "low":
-                $query = StoreProduct::orderBy('price');
+                $query = $query->orderBy('price');
                 break;
             case "high":
-                $query = StoreProduct::orderBy('price', 'DESC');
+                $query = $query->orderBy('price', 'DESC');
                 break;
             case "old":
-                $query = StoreProduct::orderBy('release_date');
+                $query = $query->orderBy('release_date');
                 break;
             case "new":
-                $query = StoreProduct::orderBy('release_date', 'DESC');
+                $query = $query->orderBy('release_date', 'DESC');
                 break;
 
             default:
                 if ((isset($section) && ($section == "%" || $section == "all"))) {
-                    $query = StoreProduct::orderBy('position')->orderBy('release_date', 'DESC');
+                    $query = $query->orderBy('position')->orderBy('release_date', 'DESC');
                 } else {
-                    $query = StoreProduct::orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
+                    $query = $query->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
                 }
                 break;
         }
 
-        $availableProducts = new Collection();
-        $x = 0;
+        $availableProducts = [];
 
         if ($section != '%' && strtoupper($section) != 'ALL')
         {
@@ -74,12 +73,12 @@ trait Products
                   ->where('sections.' . $sectionField, $sectionCompare, '%' . $section. '%');
         } 
 
-        if ($section == '%' || strtoupper($section) == 'ALL')
+        /*if ($section == '%' || strtoupper($section) == 'ALL')
         {
             $query->leftJoin('sections', function($join) {
                 $join->on('sections.id', '=', DB::raw(-1));
             });
-        }
+        }*/
 
         $query->where('store_products.store_id', $this->storeId);
         $query->where('deleted', 0);
@@ -127,14 +126,18 @@ trait Products
 
             if ($product->available == 1)
             {
-                //Set mutated attributes
-                $product->artist = $product->artist;
+                $productOutput['id'] = $product->id;
+                $productOutput['artist'] = $product->artist->name;
+                $productOutput['title'] = $product->title;
+                $productOutput['description'] = $product->description;
+                $productOutput['price'] = $product->price;
+                $productOutput['format'] = $product->format;
+                $productOutput['release_date'] = $product->release_date;
+
                 $product->image = $product->image;
                 $product->format = $product->format;
-                $product->title = $product->title;
-                $availableProducts->push($product);
-
-                $x++;
+        
+                $availableProducts[] = $productOutput;
             }
         }
 

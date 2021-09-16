@@ -73,9 +73,4 @@ class StoreProduct extends Model
 
         return $price;
     }
-
-    public function getArtistAttribute()
-    {
-        return $this->artist()->first();
-    }
 }
