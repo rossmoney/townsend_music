@@ -16,4 +16,9 @@ use App\Http\Controllers\ProductsController;
 
 Route::get('/', function () {
     return view('welcome');
-})
+});
+
+//Route::resource('products', ProductsController::class);
+
+Route::get('/products', [ ProductsController::class, 'index']);
+Route::get('/products/{section}', [ ProductsController::class, 'bySection']);

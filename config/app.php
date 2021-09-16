@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'images_domain' => env('IMAGES_DOMAIN', 'https://img.tmstor.es/'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
