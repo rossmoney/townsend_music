@@ -59,8 +59,8 @@ trait Products
             default:
                 if ((isset($section) && ($section == "%" || $section == "all"))) {
                     $query = $query->orderBy('position')->orderBy('release_date', 'DESC');
-                } else {
-                    $query = $query->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
+               // } else {
+                //    $query = $query->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
                 }
                 break;
         }
@@ -69,9 +69,13 @@ trait Products
 
         if ($section != '%' && strtoupper($section) != 'ALL')
         {
-            $query->join('store_products_section', 'store_products_section.store_product_id', '=', 'store_products.id')
+            $query->whereHas('sections', function($q) use ($sectionField, $sectionCompare, $section) {
+                $q->where($sectionField, $sectionCompare, '%' . $section. '%');
+                $q->orderBy('store_products_section.position')->orderBy('release_date', 'DESC');
+            });
+            /*$query->join('store_products_section', 'store_products_section.store_product_id', '=', 'store_products.id')
                   ->join('sections', 'store_products_section.section_id', '=', 'sections.id')
-                  ->where('sections.' . $sectionField, $sectionCompare, '%' . $section. '%');
+                  ->where('sections.' . $sectionField, $sectionCompare, '%' . $section. '%');*/
         } 
 
         if ($section == '%' || strtoupper($section) == 'ALL')
